@@ -540,6 +540,10 @@ Ext.Picker.Slot = Ext.extend(Ext.DataView, {
     onItemTap: function(node) {
         Ext.Picker.Slot.superclass.onItemTap.apply(this, arguments);
         this.setSelectedNode(node);
+
+        this.selectedNode = node;
+        this.selectedIndex = this.indexOf(node);
+        this.fireEvent('slotpick', this, this.getValue(), this.selectedNode);
     },
     
     /**

@@ -3,7 +3,7 @@ HubList.Container = Ext.regModel('Container', {
         {name: 'id', type: 'int'},
         {name: 'name', type: 'string'},
         {name: 'type', type: 'string'},
-        {name: 'containerId'}
+        {name: 'containerId', type: 'int'}
     ],
       
     associations: [

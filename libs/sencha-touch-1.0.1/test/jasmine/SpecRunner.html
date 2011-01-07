@@ -3,10 +3,18 @@
 <html>
     <head>
         <title>Jasmine Test Runner - Sencha Touch</title>
-        <link rel="stylesheet" type="text/css" href="../../src/platform/test/jasmine/lib/reporter/resources/reporter.css" />
+        <link rel="stylesheet" type="text/css" href="../../src/platform/test/jasmine/lib/reporter/resources/reporter.css">
+        
         <script type="text/javascript" src="../../src/platform/test/jasmine/lib/jasmine-1.0.1/jasmine.js"></script>
-        <script type="text/javascript" src="../../src/platform/test/jasmine/lib/reporter/src/Spec.js"></script>
+        <script type="text/javascript" src="../../src/platform/test/jasmine/lib/jasmine-extensions/Browser.js"></script>
+        <script type="text/javascript" src="../../src/platform/test/jasmine/lib/jasmine-extensions/CodeHighLighter.js"></script>
+        <script type="text/javascript" src="../../src/platform/test/jasmine/lib/jasmine-extensions/Spec.js"></script>
+        <script type="text/javascript" src="../../src/platform/test/jasmine/lib/jasmine-extensions/StringPrettyPrinter.js"></script>
         <script type="text/javascript" src="../../src/platform/test/jasmine/lib/reporter/src/Reporter.js"></script>
+        <script type="text/javascript" src="../../src/platform/test/jasmine/lib/reporter/src/HTMLUtils.js"></script>
+        <script type="text/javascript" src="../../src/platform/test/jasmine/lib/reporter/src/BadGlobals.js"></script>
+        <script type="text/javascript" src="../../src/platform/test/jasmine/lib/reporter/src/DomSandbox.js"></script>
+        <script type="text/javascript" src="../../src/platform/test/jasmine/lib/reporter/src/StackTrace.js"></script>
 
         <!--
             Source files
@@ -125,6 +133,7 @@
 
         <!-- package: Touch Core -->
         <script type="text/javascript" src="../../src/core/Ext.js"></script>
+        <script type="text/javascript" src="../../src/core/Viewport.js"></script>
         <script type="text/javascript" src="../../src/util/TapRepeater.js"></script>
         <script type="text/javascript" src="../../src/util/JSON.js"></script>
         <script type="text/javascript" src="../../src/util/JSONP.js"></script>

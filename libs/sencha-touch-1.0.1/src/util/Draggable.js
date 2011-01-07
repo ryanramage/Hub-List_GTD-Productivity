@@ -100,7 +100,7 @@ Ext.util.Draggable = Ext.extend(Ext.util.Observable, {
     /**
      * Whether or not to automatically re-calculate the Scroller's and its container's size on every
      * touchstart.
-     * Defaults to false
+     * Defaults to true
      * @type Boolean
      */
     updateBoundaryOnTouchStart: true,
@@ -567,10 +567,6 @@ Ext.util.Draggable = Ext.extend(Ext.util.Observable, {
         }
 
         this.stopAnimation();
-
-        if (this.dragging) {
-            this.onDragEnd(e);
-        }
 
         this.setDragging(true);
         this.startTouchPoint = new Ext.util.Point(e.startX, e.startY);

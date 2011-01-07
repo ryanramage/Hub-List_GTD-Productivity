@@ -13,13 +13,43 @@
 
 <div id="releases">
     <div class="release">
+        <h1>Release Notes for Sencha Touch 1.0.2</h1>
+
+        <p class="notes">Release Notes: Release Notes: December 9, 2010<br />
+         Version Number: 1.0.2</p>
+
+        <h2>New In This Release</h2>
+        <ul>
+            <li>
+                Data package updates
+                <ul>
+                    <li>Fixed an issue with RestProxy where urls were not correctly generated if the .records property was not an array</li>
+                    <li>Fixed XmlReader querySelectorAll bug</li>
+                    <li>Ext.Controller now gets a reference to the current Ext.Application</li>
+                    <li>ScriptTagProxy no longer fails if given a null response</li>
+                    <li>Fixed a bug where an empty filters array would break ScriptTagProxy's ability to build a url</li>
+                </ul>
+            </li>
+            <li>
+                General Bugs Fixes
+                <ul>
+                    <li>Include uncompressed debug version of CSS in releases</li>
+                    <li>Fixed "slotpick" event from not firing when tapping on an item of Ext.form.DatePicker</li>
+                    <li>Fixed "change" event from not firing in Ext.form.DatePicker</li>
+                    <li>Fixed Checkbox and Radio from not responding to tap events on desktop Safari and Chrome</li>
+                    <li>Fixed missing Viewport initialization in Ext.Application</li>
+                    <li>Sortable working again for all examples</li>
+                    <li>Kiva and Twitter examples fixed</li>
+                </ul>
+            </li>
+        </ul>
+	</div>
+
+    <div class="release">
         <h1>Release Notes for Sencha Touch 1.0.1</h1>
         
         <p class="notes">Release Notes: November 24, 2010<br />
-         Version Number: 1.0.1</p>
-        
-        <p class="notes"><strong><a href="http://www.sencha.com/products/touch/thank-you.php?dl=1.0.1">Download Sencha Touch 1.0.1</a></strong></p>
-                
+         Version Number: 1.0.1</p>                
         <h2>New In This Release</h2>
         <ul>
             <li>
@@ -42,7 +72,7 @@
                     <li>Fixed a flaw with List Selection</li>
                     <li>Fixed isDraggable / setDraggable issue on Component</li>
                     <li>Have DataView.bindStore correctly rebind the SelectionModel as well</li>
-                    <li>Fixed slider thumb initially going outside the bounds (ticket #608)</li>
+                    <li>Fixed slider thumb initially going outside the bounds</li>
                 </ul>
             </li>
             <li>
@@ -65,17 +95,17 @@
             <li>Platform Data Package
                 <ul>
                     <li>Ext.data.RestProxy can automatically generate urls for instances and collections (see Ext.data.RestProxy docs for details)</li>
-                    <li>Associations are now correctly populated when loading nested XML data. Previously this only worked for JSON data (ticket #583)</li>
-                    <li>When loading nested data including nested hasMany associations, the inverse belongsTo association is also now populated (ticket #595)</li>
+                    <li>Associations are now correctly populated when loading nested XML data. Previously this only worked for JSON data</li>
+                    <li>When loading nested data including nested hasMany associations, the inverse belongsTo association is also now populated</li>
                     <li>
                         When a Model instance is saved to a server and the server returns a response including data such as the ID to be set on the Model instance, that data is
-                        now applied back to the model (ticket 593)
+                        now applied back to the model
                     </li>
-                    <li>Fixed a bug where Model instances that were removed from a Store and then synced would not be properly removed (ticket #592)</li>
-                    <li>Fixed a bug where new Model instances were always marked dirty (ticket #587)</li>
-                    <li>Fields that have a convert function are populated last so that data in the other fields will already be present (ticket #555)</li>
-                    <li>Fixed a documentation error on AbstractStore - the remove event was incorrectly documented (ticket #582)</li>
-                    <li>Fixed a documentation error on Store - the syntax for the sort method was wrong (ticket #585)</li>
+                    <li>Fixed a bug where Model instances that were removed from a Store and then synced would not be properly removed</li>
+                    <li>Fixed a bug where new Model instances were always marked dirty</li>
+                    <li>Fields that have a convert function are populated last so that data in the other fields will already be present</li>
+                    <li>Fixed a documentation error on AbstractStore - the remove event was incorrectly documented</li>
+                    <li>Fixed a documentation error on Store - the syntax for the sort method was wrong</li>
                     <li>
                         Improvements to Ext.data.* docs, including:
                         <ul>
@@ -99,10 +129,7 @@
         <h1>Release Notes for Sencha Touch 1.0</h1>
         
         <p class="notes">Release Notes: November 15, 2010<br />
-         Version Number: 1.0</p>
-        
-        <p class="notes"><strong><a href="http://www.sencha.com/products/touch/thank-you.php?dl=1.0">Download Sencha Touch 1.0</a></strong></p>
-        
+         Version Number: 1.0</p>        
         <p>
             This release forms the first stable release of Sencha Touch.
         </p>
@@ -113,7 +140,7 @@
                 General
                 <ul>
                     <li>Form fields were further improved since RC1. Over 20 new form-related tickets have been closed, typically Slider and DatePicker issues</li>
-                    <li>Scroller performance is up to 120% faster on Androids, and consume much less CPU</li>
+                    <li>Scroller performance is up to 120% faster on Android devices, and consumes much less CPU</li>
                     <li>A vast amount of documentation were added, especially for core class such as Draggable, Scroller</li>
                     <li>Change default theme color, as well as some other CSS improvements were made for the default theme and loading masks</li>
                     <li>EventRecorder and EventSimulator are officially included, with detailed example in kitchensink</li>
@@ -685,7 +712,6 @@
         
         <h2>New In This Release</h2>
         <p>This release focused on refactoring, simplifying and bug-fixing. We have managed to fix many bugs thanks to the feedback and reports on our forums would like to thank everyone for their comments.</p>
-        </p>
         <ul>
             <li><strong>Refactored the Scroller. Now implements actual physics for momentum
                 and bouncing. Improved performance. Also supports direction: 'both'.</strong></li>

@@ -8,6 +8,7 @@ HubList.Viewport = Ext.extend(Ext.Panel, {
             scroll: 'vertical',
              dockedItems: [{
             	dock: 'top',
+            	id: 'viewportTopToolbar',
                 xtype: 'toolbar',
                 title: 'Hub List'
             },
@@ -43,5 +44,45 @@ HubList.Viewport = Ext.extend(Ext.Panel, {
         });
     
         HubList.Viewport.superclass.initComponent.apply(this, arguments);
+    },
+    
+    updateTbarBackButton: function(itemId, btnLabel) {
+    	var topToolbar = this.getDockedComponent('viewportTopToolbar');
+    	var existingBackBtn = topToolbar.getComponent('vpTbarBackBtn');
+    	
+    	if(existingBackBtn) {
+    		existingBackBtn.setText(btnLabel);
+    		existingBackBtn.navId = itemId;
+    	} else {
+    		var containersController = Ext.ControllerManager.get('containers');
+	    	var newBackBtn = new Ext.Button({
+	    		id: 'vpTbarBackBtn',
+	    		navId: itemId,
+	    		ui: 'back',
+	    		text: btnLabel || 'Back',
+	    		listeners: {
+	    			'tap': function(btn, eventObj) {
+	    				Ext.dispatch({
+	    					controller: 'main',
+	    					action: 'navigateToContainer',
+	    					containerId: btn.navId
+	    				});
+            		}
+	    		}
+	    	});
+	    	
+    		topToolbar.add(newBackBtn);
+    	}
+
+   		topToolbar.doComponentLayout();
+    },
+    
+    removeTbarBackButton: function() {
+    	var topToolbar = this.getDockedComponent('viewportTopToolbar');
+    	var existingBackBtn = topToolbar.getComponent('vpTbarBackBtn');
+    	
+    	if(existingBackBtn) {
+    		existingBackBtn.destroy();
+    	}
     }
 });

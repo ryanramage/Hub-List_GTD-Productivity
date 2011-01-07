@@ -34,6 +34,14 @@ Ext.gesture.Manager = new Ext.AbstractManager({
         this.attachListeners();
     },
 
+    freeze: function() {
+        this.isFrozen = true;
+    },
+
+    thaw: function() {
+        this.isFrozen = false;
+    },
+
     getEventSimulator: function() {
         if (!this.eventSimulator) {
             this.eventSimulator = new Ext.util.EventSimulator();
@@ -82,10 +90,14 @@ Ext.gesture.Manager = new Ext.AbstractManager({
             return;
         }
 
-        if (!Ext.is.iOS) {
+        if (Ext.is.Android) {
             if (!(target.tagName && ['input', 'textarea', 'select'].indexOf(target.tagName.toLowerCase()) !== -1)) {
                 e.preventDefault();
             }
+        }
+
+        if (this.isFrozen) {
+            return;
         }
         
         // There's already a touchstart without any touchend!
@@ -128,6 +140,10 @@ Ext.gesture.Manager = new Ext.AbstractManager({
             e.preventDefault();
         }
 
+        if (this.isFrozen) {
+            return;
+        }
+
         var gestures = this.currentGestures,
             gesture,
             touch = e.changedTouches ? e.changedTouches[0] : e;
@@ -156,6 +172,10 @@ Ext.gesture.Manager = new Ext.AbstractManager({
      * @private
      */
     onTouchEnd: function(e) {
+        if (this.isFrozen) {
+            return;
+        }
+        
         var gestures = this.currentGestures.slice(0),
             ln = gestures.length,
             i, gesture, endPoint,
@@ -268,7 +288,8 @@ Ext.gesture.Manager = new Ext.AbstractManager({
 
     addEventListener: function(target, eventName, listener, options) {
         target = Ext.getDom(target);
-
+        options = options || {};
+        
         var targets = this.targets,
             name = this.getGestureName(eventName),
             gestures = Ext.Element.data(target, 'x-gestures'),
@@ -292,7 +313,7 @@ Ext.gesture.Manager = new Ext.AbstractManager({
         gesture = this.get(target.id + '-' + name);
         
         if (!gesture) {
-            gesture = this.create(Ext.apply({}, options || {}, {
+            gesture = this.create(Ext.apply({}, options, {
                 target: target,
                 type: name
             }));

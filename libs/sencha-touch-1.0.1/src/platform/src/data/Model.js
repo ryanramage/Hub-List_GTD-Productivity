@@ -238,12 +238,6 @@ Ext.data.Model = Ext.extend(Ext.util.Stateful, {
     constructor: function(data, id) {
         data = data || {};
         
-        if (this.evented) {
-            this.addEvents(
-                
-            );
-        }
-        
         /**
          * An internal unique ID for each Model instance, used to identify Models that don't have an ID yet
          * @property internalId

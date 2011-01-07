@@ -208,9 +208,9 @@ Ext.util.Scroller = Ext.extend(Ext.util.Draggable, {
      * @cfg {Number} fps
      * The desired fps of the deceleration. Defaults to 80.
      */
-    fps: Ext.is.Blackberry ? 22 : 80,
+    fps: Ext.is.Blackberry ? 22 : ((Ext.is.iOS || Ext.is.Desktop) ? 70 : 40),
 
-    autoAdjustFps: !Ext.is.Blackberry,
+    autoAdjustFps: false,
 
     /**
      * @cfg {Number} friction

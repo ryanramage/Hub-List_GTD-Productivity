@@ -140,6 +140,7 @@
             "id"    : "core",
             "files" : [
                 {"path": "src/core/", "name": "Ext.js"},
+				{"path": "src/core/", "name": "Viewport.js"},
                 {"path": "src/util/", "name": "TapRepeater.js"},
                 {"path": "src/util/", "name": "JSON.js"},
                 {"path": "src/util/", "name": "JSONP.js"},

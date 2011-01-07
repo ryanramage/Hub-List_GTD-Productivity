@@ -4,6 +4,12 @@ ARGUMENTS=$*
 DIRNAME="$(dirname $0)"
 if [ $UNAME = "Darwin" ] ; then
     OS="mac"
+elif [ ${UNAME%%_*} = "CYGWIN" ] ; then
+    OS="win"
+elif [ ${UNAME%%32*} = "MINGW" ] ; then
+    OS="win"
+elif [ ${UNAME%%64*} = "MINGW" ] ; then
+    OS="win"
 else
     OS="linux"
 fi

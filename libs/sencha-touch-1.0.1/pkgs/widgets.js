@@ -3279,7 +3279,7 @@ Ext.Container = Ext.extend(Ext.lib.Container, {
     
     //<deprecated since=0.99>
     setCard: function() {
-        console.warn("Stateful: setCard has been deprecated. Please use setActiveItem.");
+        console.warn("Container: setCard has been deprecated. Please use setActiveItem.");
         this.setActiveItem.apply(this, arguments);
     },
     //</deprecated>
@@ -9842,6 +9842,10 @@ Ext.Picker.Slot = Ext.extend(Ext.DataView, {
     onItemTap: function(node) {
         Ext.Picker.Slot.superclass.onItemTap.apply(this, arguments);
         this.setSelectedNode(node);
+
+        this.selectedNode = node;
+        this.selectedIndex = this.indexOf(node);
+        this.fireEvent('slotpick', this, this.getValue(), this.selectedNode);
     },
     
     /**
@@ -11913,7 +11917,7 @@ Ext.form.Field = Ext.extend(Ext.Component,  {
         if (this.fieldEl) {
             if (this.useMask && this.mask) {
                 this.mon(this.mask, {
-                    tap: this.onMaskTap,
+                    click: this.onMaskTap,
                     scope: this
                 });
             }
@@ -12003,12 +12007,12 @@ Ext.form.Field = Ext.extend(Ext.Component,  {
             return false;
         }
 
-        if (Ext.is.iOS && e.browserEvent && !e.browserEvent.isSimulated && !e.browserEvent.isSimulated) {
-            console.log('onMaskTap prevented');
-            e.preventDefault();
-            e.stopPropagation();
-            return false;
-        }
+//        if (Ext.is.iOS && e.browserEvent && !e.browserEvent.isSimulated) {
+//            console.log('onMaskTap prevented');
+//            e.preventDefault();
+//            e.stopPropagation();
+//            return false;
+//        }
 
         return true;
     },
@@ -13644,7 +13648,7 @@ Ext.form.Checkbox = Ext.extend(Ext.form.Field, {
                 e = e.browserEvent;
             }
 
-            if (!e.isSimulated) {
+            if (Ext.supports.Touch && !e.isSimulated) {
                 e.preventDefault();
                 e.stopPropagation();
                 return;
@@ -13910,6 +13914,8 @@ Ext.form.Select = Ext.extend(Ext.form.Text, {
 
     // @cfg {Boolean} useMask @hide
     useMask: true,
+
+    monitorOrientation: true,
     
     // @private
     initComponent: function() {
@@ -14004,6 +14010,13 @@ Ext.form.Select = Ext.extend(Ext.form.Text, {
         }
 
         return this.listPanel;
+    },
+
+    // @private
+    onOrientationChange: function() {
+        if (this.listPanel && !this.listPanel.hidden && !Ext.is.Phone) {
+            this.listPanel.showBy(this.el, false, false);
+        }
     },
 
     // @private
@@ -14226,7 +14239,7 @@ Ext.form.DatePicker = Ext.extend(Ext.form.Field, {
              * @param {Ext.form.DatePicker} this
              * @param {Date} date The new date
              */
-            'select'
+            'change'
         );
 
         this.tabIndex = -1;
@@ -14279,7 +14292,7 @@ Ext.form.DatePicker = Ext.extend(Ext.form.Field, {
      */
     onPickerChange : function(picker, value) {
         this.setValue(value);
-        this.fireEvent('select', this, this.getValue());
+        this.fireEvent('change', this, this.getValue());
     },
     
     /**

@@ -424,12 +424,6 @@ Ext.data.Model = Ext.extend(Ext.util.Stateful, {
     constructor: function(data, id) {
         data = data || {};
         
-        if (this.evented) {
-            this.addEvents(
-                
-            );
-        }
-        
         /**
          * An internal unique ID for each Model instance, used to identify Models that don't have an ID yet
          * @property internalId
@@ -4460,6 +4454,7 @@ store.sort('myField', 'DESC');
      * @param {Number} startIndex (optional) The index to start searching at
      * @param {Boolean} anyMatch (optional) True to match any part of the string, not just the beginning
      * @param {Boolean} caseSensitive (optional) True for case sensitive comparison
+     * @param {Boolean} exactMatch True to force exact match (^ and $ characters added to the regex). Defaults to false.
      * @return {Ext.data.Record} The matched record or null
      */
     findRecord : function() {
@@ -6977,9 +6972,10 @@ Ext.data.RestProxy = Ext.extend(Ext.data.AjaxProxy, {
      * so that additional parameters like the cache buster string are appended
      */
     buildUrl: function(request) {
-        var record = request.operation.records[0],
-            format = this.format,
-            url    = request.url || this.url;
+        var records = request.operation.records || [],
+            record  = records[0],
+            format  = this.format,
+            url     = request.url || this.url;
         
         if (this.appendId && record) {
             if (!url.match(/\/$/)) {
@@ -7375,7 +7371,7 @@ Ext.data.ScriptTagProxy = Ext.extend(Ext.data.ServerProxy, {
             url = Ext.urlAppend(url, Ext.urlEncode(params));
         }
         
-        if (filters.length) {
+        if (filters && filters.length) {
             for (i = 0; i < filters.length; i++) {
                 filter = filters[i];
                 
@@ -8255,6 +8251,14 @@ Ext.data.Reader = Ext.extend(Object, {
      * object. See the Ext.data.Reader intro docs for full explanation. Defaults to true.
      */
     implicitIncludes: true,
+    
+    // Private. Empty ResultSet to return when response is falsy (null|undefined|empty string)
+    nullResultSet: new Ext.data.ResultSet({
+        total  : 0,
+        count  : 0,
+        records: [],
+        success: true
+    }),
 
     constructor: function(config) {
         Ext.apply(this, config || {});
@@ -8288,12 +8292,16 @@ Ext.data.Reader = Ext.extend(Object, {
      */
     read: function(response) {
         var data = response;
+        
+        if (response) {
+            if (response.responseText) {
+                data = this.getResponseData(response);
+            }
 
-        if (response.responseText) {
-            data = this.getResponseData(response);
+            return this.readRecords(data);
+        } else {
+            return this.nullResultSet;
         }
-
-        return this.readRecords(data);
     },
 
     /**

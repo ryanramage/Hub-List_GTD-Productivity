@@ -293,7 +293,7 @@ Ext.Container = Ext.extend(Ext.lib.Container, {
     
     //<deprecated since=0.99>
     setCard: function() {
-        console.warn("Stateful: setCard has been deprecated. Please use setActiveItem.");
+        console.warn("Container: setCard has been deprecated. Please use setActiveItem.");
         this.setActiveItem.apply(this, arguments);
     },
     //</deprecated>

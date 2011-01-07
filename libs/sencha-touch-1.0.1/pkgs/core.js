@@ -6,11 +6,11 @@ Ext.apply(Ext, {
      * The version of the framework
      * @type String
      */
-    version : '1.0.1',
+    version : '1.0.2',
     versionDetail : {
         major : 1,
         minor : 0,
-        patch : 1
+        patch : 2
     },
     
     /**
@@ -213,187 +213,6 @@ function(el){
     }
 });
 
-Ext.Viewport = new (Ext.extend(Ext.util.Observable, {
-    constructor: function() {
-        var me = this;
-        
-        this.addEvents(
-            'orientationchange',
-            'resize'
-        );
-            
-        this.stretchSizes = {};
-
-        if (Ext.supports.OrientationChange) {
-            window.addEventListener('orientationchange', Ext.createDelegate(me.onOrientationChange, me), false);
-        }
-        else {
-            window.addEventListener('resize', Ext.createDelegate(me.onResize, me), false);
-        }
-
-        if (!Ext.desktop) {
-            document.addEventListener('touchstart', Ext.createDelegate(me.onTouchStartCapturing, me), true);
-        }
-    },
-
-    init: function(fn) {
-        var me = this,
-            stretchSize = Math.max(window.innerHeight, window.innerWidth) * 2,
-            body = Ext.getBody();
-
-        me.updateOrientation();
-
-        this.initialHeight = window.innerHeight;
-        this.initialOrientation = this.orientation;
-
-        body.setHeight(stretchSize);
-        this.scrollToTop();
-
-        setTimeout(function() {
-            me.scrollToTop();
-            me.initialHeight = Math.max(me.initialHeight, window.innerHeight);
-            
-            fn();
-
-            me.updateBodySize();
-        }, 500);
-    },
-
-    scrollToTop: function() {
-        if (Ext.is.iOS) {
-            document.body.scrollTop = document.body.scrollHeight;
-        }
-        else {
-            window.scrollTo(0, 1);
-        }
-    },
-
-    updateBodySize: function() {
-        Ext.getBody().setSize(window.innerWidth, window.innerHeight);
-    },
-    
-    updateOrientation: function() {
-        this.lastSize = this.getSize();
-        this.orientation = this.getOrientation();
-    },
-
-    onTouchStartCapturing: function(e) {
-        if (!Ext.currentlyFocusedField && Ext.is.iOS) {
-            this.scrollToTop();
-        }
-    },
-
-    onOrientationChange: function() {
-        var me = this,
-            body = Ext.getBody();
-
-        body.setHeight(body.getWidth());
-
-        this.updateOrientation();
-
-        this.fireEvent('orientationchange', this, this.orientation);
-
-//        if (Ext.is.iOS) {
-            setTimeout(function() {
-                me.scrollToTop();
-                setTimeout(function() {
-                    me.updateBodySize();
-                    me.fireResizeEvent();
-                }, 100);
-            }, 100);
-//        } else {
-//            me.scrollToTop();
-//            me.updateBodySize();
-//            me.fireResizeEvent();
-//        }
-    },
-
-    fireResizeEvent: function() {
-        var me = this;
-
-        if (!Ext.is.iOS) {
-            if (this.resizeEventTimer) {
-                clearTimeout(this.resizeEventTimer);
-            }
-
-            this.resizeEventTimer = setTimeout(function() {
-                me.fireEvent('resize', me, me.getSize());
-            }, 500);
-        } else {
-            me.fireEvent('resize', me, me.getSize());
-        }
-    },
-
-    onResize: function() {
-        if (this.orientation != this.getOrientation()) {
-            this.onOrientationChange();
-        } else {
-            var size = this.getSize();
-
-            if (!Ext.is.iOS) {
-                if ((size.width == this.lastSize.width && size.height > this.lastSize.height) ||
-                    (size.height == this.lastSize.height && size.width > this.lastSize.width)) {
-                    this.fireEvent('resize', this, size);
-                }
-            } else {
-                this.fireEvent('resize', this, size);
-            }
-        }
-    },
-
-    getSize: function() {
-        return {
-            width: window.innerWidth,
-            height: (this.orientation == this.initialOrientation) ? 
-                        Math.max(this.initialHeight, window.innerHeight) :
-                        window.innerHeight
-        };
-    },
-
-    getOffset: function() {
-        return {
-            x: window.pageXOffset,
-            y: window.pageYOffset
-        };
-    },
-//
-//    scrollToTop: function(delay, fn) {
-//        return;
-//        var callback = function() {
-//            document.body.scrollTop = document.body.offsetHeight;
-//            if (fn) {
-//                fn();
-//            }
-//        };
-//
-//        if (delay) {
-//            setTimeout(callback, delay);
-//        } else {
-//            callback();
-//        }
-//    },
-    
-    getOrientation: function() {
-        var size = this.getSize();
-
-        if (window.hasOwnProperty('orientation')) {
-            return (window.orientation == 0 || window.orientation == 180) ? 'portrait' : 'landscape';
-        }
-        else {
-            if (!Ext.is.iOS) {
-                if ((size.width == this.lastSize.width && size.height < this.lastSize.height) ||
-                    (size.height == this.lastSize.height && size.width < this.lastSize.width)) {
-                    return this.orientation;
-                }
-            }
-            
-            return (window.innerHeight > window.innerWidth) ? 'portrait' : 'landscape';
-        }
-
-    }
-
-}));
-
 //Initialize doc classes and feature detections
 (function() {
     var initExt = function() {
@@ -439,6 +258,196 @@ Ext.Viewport = new (Ext.extend(Ext.util.Observable, {
     }
 })();
 
+/**
+ * @class Ext.Viewport
+ * @singleton
+ * @ignore
+ * @private
+ *
+ * Handles viewport sizing for the whole application
+ */
+
+Ext.Viewport = new (Ext.extend(Ext.util.Observable, {
+    constructor: function() {
+        var me = this;
+
+        this.addEvents(
+            'orientationchange',
+            'resize'
+        );
+
+        this.stretchSizes = {};
+
+        if (Ext.supports.OrientationChange) {
+            window.addEventListener('orientationchange', Ext.createDelegate(me.onOrientationChange, me), false);
+        }
+        else {
+            window.addEventListener('resize', Ext.createDelegate(me.onResize, me), false);
+        }
+
+        if (!Ext.desktop) {
+            document.addEventListener('touchstart', Ext.createDelegate(me.onTouchStartCapturing, me), true);
+        }
+    },
+
+    init: function(fn, scope) {
+        var me = this,
+            stretchSize = Math.max(window.innerHeight, window.innerWidth) * 2,
+            body = Ext.getBody();
+
+        me.updateOrientation();
+
+        this.initialHeight = window.innerHeight;
+        this.initialOrientation = this.orientation;
+
+        body.setHeight(stretchSize);
+
+        Ext.gesture.Manager.freeze();
+
+        this.scrollToTop();
+        // These 2 timers here are ugly but it's the only way to
+        // make address bar hiding works on all the devices we have
+        // including the new Galaxy Tab
+        setTimeout(function() {
+            me.scrollToTop();
+            setTimeout(function() {
+                me.scrollToTop();
+                me.initialHeight = Math.max(me.initialHeight, window.innerHeight);
+
+                if (fn) {
+                    fn.apply(scope || window);
+                }
+
+                me.updateBodySize();
+
+                Ext.gesture.Manager.thaw();
+            }, 500);
+        }, 500);
+
+    },
+
+    scrollToTop: function() {
+        if (Ext.is.iOS) {
+            document.body.scrollTop = document.body.scrollHeight;
+        }
+        else {
+            window.scrollTo(0, 1);
+        }
+    },
+
+    updateBodySize: function() {
+        Ext.getBody().setSize(window.innerWidth, window.innerHeight);
+    },
+
+    updateOrientation: function() {
+        this.lastSize = this.getSize();
+        this.orientation = this.getOrientation();
+    },
+
+    onTouchStartCapturing: function(e) {
+        if (!Ext.currentlyFocusedField && Ext.is.iOS) {
+            this.scrollToTop();
+        }
+    },
+
+    onOrientationChange: function() {
+        var me = this,
+            body = Ext.getBody();
+
+        Ext.gesture.Manager.freeze();
+
+        body.setHeight(body.getWidth());
+
+        this.updateOrientation();
+
+        this.fireEvent('orientationchange', this, this.orientation);
+
+        setTimeout(function() {
+            me.scrollToTop();
+            setTimeout(function() {
+                me.updateBodySize();
+                me.fireResizeEvent();
+
+                Ext.gesture.Manager.thaw();
+            }, 200);
+        }, 200);
+    },
+
+    fireResizeEvent: function() {
+        var me = this;
+
+        if (!Ext.is.iOS) {
+            if (this.resizeEventTimer) {
+                clearTimeout(this.resizeEventTimer);
+            }
+
+            this.resizeEventTimer = setTimeout(function() {
+                me.fireEvent('resize', me, me.getSize());
+            }, 500);
+        } else {
+            me.fireEvent('resize', me, me.getSize());
+        }
+    },
+
+    onResize: function() {
+        if (this.orientation != this.getOrientation()) {
+            this.onOrientationChange();
+        } else {
+            var size = this.getSize();
+
+            if (!Ext.is.iOS && !Ext.is.Desktop) {
+                if ((size.width == this.lastSize.width && size.height > this.lastSize.height) ||
+                    (size.height == this.lastSize.height && size.width > this.lastSize.width)) {
+                    this.fireEvent('resize', this, size);
+                }
+            } else {
+                this.fireEvent('resize', this, size);
+            }
+        }
+    },
+
+    getSize: function() {
+        var size = {
+            width: window.innerWidth,
+            height: window.innerHeight
+        };
+
+        if (!Ext.is.Desktop) {
+            size.height = (this.orientation == this.initialOrientation) ?
+                            Math.max(this.initialHeight, size.height) :
+                            size.height
+        }
+
+        return size;
+    },
+
+    getOffset: function() {
+        return {
+            x: window.pageXOffset,
+            y: window.pageYOffset
+        };
+    },
+
+    getOrientation: function() {
+        var size = this.getSize();
+
+        if (window.hasOwnProperty('orientation')) {
+            return (window.orientation == 0 || window.orientation == 180) ? 'portrait' : 'landscape';
+        }
+        else {
+            if (!Ext.is.iOS && !Ext.is.Desktop) {
+                if ((size.width == this.lastSize.width && size.height < this.lastSize.height) ||
+                    (size.height == this.lastSize.height && size.width < this.lastSize.width)) {
+                    return this.orientation;
+                }
+            }
+
+            return (window.innerHeight > window.innerWidth) ? 'portrait' : 'landscape';
+        }
+
+    }
+
+}));
 /**
  * @class Ext.util.TapRepeater
  * @extends Ext.util.Observable
@@ -1314,7 +1323,7 @@ Ext.util.Draggable = Ext.extend(Ext.util.Observable, {
     /**
      * Whether or not to automatically re-calculate the Scroller's and its container's size on every
      * touchstart.
-     * Defaults to false
+     * Defaults to true
      * @type Boolean
      */
     updateBoundaryOnTouchStart: true,
@@ -1781,10 +1790,6 @@ Ext.util.Draggable = Ext.extend(Ext.util.Observable, {
         }
 
         this.stopAnimation();
-
-        if (this.dragging) {
-            this.onDragEnd(e);
-        }
 
         this.setDragging(true);
         this.startTouchPoint = new Ext.util.Point(e.startX, e.startY);
@@ -2511,9 +2516,9 @@ Ext.util.Scroller = Ext.extend(Ext.util.Draggable, {
      * @cfg {Number} fps
      * The desired fps of the deceleration. Defaults to 80.
      */
-    fps: Ext.is.Blackberry ? 22 : 80,
+    fps: Ext.is.Blackberry ? 22 : ((Ext.is.iOS || Ext.is.Desktop) ? 70 : 40),
 
-    autoAdjustFps: !Ext.is.Blackberry,
+    autoAdjustFps: false,
 
     /**
      * @cfg {Number} friction
@@ -3340,14 +3345,14 @@ Ext.util.Sortable = Ext.extend(Ext.util.Observable, {
         }
 
         this.el.addCls(this.baseCls);
-        //this.tapEvent = (this.delay > 0) ? 'taphold' : 'tapstart';
+        this.startEventName = (this.delay > 0) ? 'taphold' : 'tapstart';
         if (!this.disabled) {
             this.enable();
         }
     },
 
     // @private
-    onTouchStart : function(e, t) {
+    onStart : function(e, t) {
         if (this.cancelSelector && e.getTarget(this.cancelSelector)) {
             return;
         }
@@ -3364,14 +3369,13 @@ Ext.util.Sortable = Ext.extend(Ext.util.Observable, {
     onSortStart : function(e, t) {
         this.sorting = true;
         var draggable = new Ext.util.Draggable(t, {
-            delay: this.delay,
+            threshold: 0,
             revert: this.revert,
             direction: this.direction,
             constrain: this.constrain === true ? this.el : this.constrain,
             animationDuration: 100
         });
         draggable.on({
-            dragThreshold: 0,
             drag: this.onDrag,
             dragend: this.onDragEnd,
             scope: this
@@ -3379,7 +3383,7 @@ Ext.util.Sortable = Ext.extend(Ext.util.Observable, {
         
         this.dragEl = t;
         this.calculateBoxes();
-        
+
         if (!draggable.dragging) {
             draggable.onStart(e);
         }
@@ -3464,7 +3468,7 @@ Ext.util.Sortable = Ext.extend(Ext.util.Observable, {
      * the disabled configuration is set to true.
      */
     enable : function() {
-        this.el.on('touchstart', this.onTouchStart, this, {delegate: this.itemSelector});
+        this.el.on(this.startEventName, this.onStart, this, {delegate: this.itemSelector, holdThreshold: this.delay});
         this.disabled = false;
     },
 
@@ -3472,7 +3476,7 @@ Ext.util.Sortable = Ext.extend(Ext.util.Observable, {
      * Disables sorting for this Sortable.
      */
     disable : function() {
-        this.el.un('touchstart', this.onTouchStart, this);
+        this.el.un(this.startEventName, this.onStart, this);
         this.disabled = true;
     },
     
@@ -3508,7 +3512,6 @@ Ext.util.Sortable = Ext.extend(Ext.util.Observable, {
         return this.horizontal;
     }    
 });
-
 /**
  * @class Date
  *
