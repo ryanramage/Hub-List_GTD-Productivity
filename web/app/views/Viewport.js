@@ -63,7 +63,7 @@ HubList.Viewport = Ext.extend(Ext.Panel, {
 	    		listeners: {
 	    			'tap': function(btn, eventObj) {
 	    				Ext.dispatch({
-	    					controller: 'main',
+	    					controller: 'containers',
 	    					action: 'navigateToContainer',
 	    					containerId: btn.navId
 	    				});
@@ -83,6 +83,13 @@ HubList.Viewport = Ext.extend(Ext.Panel, {
     	
     	if(existingBackBtn) {
     		existingBackBtn.destroy();
+    	}
+    },
+    
+    removeContainersList: function() {
+    	var items = this.query('.containerslist');
+    	if(items.length) {
+    		items[0].destroy;
     	}
     }
 });

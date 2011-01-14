@@ -58,12 +58,34 @@ Ext.regController("containers", {
 	    	
 	    	this.fireEvent('display-container-list', {parentContainer: parentContainer});
     	} else if(parentContainer.get('type') == 'list') {
-    		// for now we just display an alert
-    		Ext.Msg.alert('Alert', 'Coming soon, view list of tasks.', Ext.emptyFn);
-    		// eventually pass control to tasks controller action maybe using dispatch
-    		//Ext.dispatch({controller: 'tasks', action: 'list', list: parentContainer});
+    		this.navigateToList(parentContainer);
     	} 	
     },
+    
+    navigateToContainer: function(options) {
+    	var that = this;
+    	var containerId = options.containerId;
+    	
+    	if(containerId == 0) {
+			this.index();    	
+    	} else {    	
+	    	var Container = Ext.ModelMgr.getModel('Container');
+	    	
+	    	Container.load(containerId, {
+	    		success: function(container, operation) {
+		    		that.list({parentContainer: container})
+	    		},
+	    		failure: function(container, operation) {
+	    			Ext.Msg.alert('Alert', 'Unable to navigate to the selected item.', Ext.emptyFn);
+	    		}
+	    	});
+	    }
+    },
+    
+    navigateToList: function(selectedList) {
+    	HubList.viewport.removeContainersList();
+    	Ext.dispatch({controller: 'tasks', action: 'list', list: selectedList});
+    },    
     
     onDisplayContainerList: function(options) {
     	var parentContainer = options.parentContainer;
