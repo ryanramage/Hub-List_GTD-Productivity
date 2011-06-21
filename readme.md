@@ -17,23 +17,23 @@ To start using Hub List you'll need these tools to push the application code int
 - [node.couchapp.js](https://github.com/mikeal/node.couchapp.js)
 
 ## Installing Hub List
-1. Create a database named hublist on your instance of CouchDB. To use a different database name just change the db config value in app.js.
+1. Create a database named hublist on your instance of CouchDB. To use a different database name just change the db config value in app.js.  
 ```
 curl -X PUT http://127.0.0.1:5984/hublist
 ``` 
 
-2. clone this repo
+2. clone this repo  
 ```
 git clone  https://github.com/rawberg/Hub-List_GTD-Productivity Hub-List
 ```
 
-3. push the code into the database you created (requires [node.couchapp.js](https://github.com/mikeal/node.couchapp.js))
+3. push the code into the database you created (requires [node.couchapp.js](https://github.com/mikeal/node.couchapp.js))  
 ```
-cd Hub-List
+cd Hub-List  
 couchapp push couchapp.js http://127.0.0.1:5984/hublist 
 ```
 
-4. open the index.html file in your browser and enjoy!
+4. open the index.html file in your browser and enjoy!  
 ```
 http://127.0.0.1:5984/hublist/index.html
 ```
@@ -51,8 +51,8 @@ Contributions are welcome! To contribute code or design simply fork this repo an
 The Hub List source is available under an open source or commercial license. The open source license is the [GPL v3 License](http://opensource.org/licenses/gpl-3.0.html). A commercial license is available for those interested in including Hub List source code in non-open source applications. Please [get in touch](http://twitter.com/#!/hublistapp) for more information on the commercial license.
 
 ## Links
-[Main Website - http://hublistapp.com](http://hublistapp.com)
-[Development Blog - http://hublistapp.com/blog](http://hublistapp.com/blog)
-[End User Support & Feature Requests](http://getsatisfaction.com/nimbleapps)
-API Documentation - Coming Soon (powered by [JSDuck](https://github.com/nene/jsduck)) 
-Twitter [@hublistapp](http://twitter.com/#!/hublistapp)
+[Main Website - http://hublistapp.com](http://hublistapp.com)  
+[Development Blog - http://hublistapp.com/blog](http://hublistapp.com/blog)  
+[End User Support & Feature Requests](http://getsatisfaction.com/nimbleapps)  
+API Documentation - Coming Soon (powered by [JSDuck](https://github.com/nene/jsduck))  
+Twitter [@hublistapp](http://twitter.com/#!/hublistapp)  
