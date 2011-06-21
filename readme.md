@@ -1,5 +1,5 @@
-# Hub List - Open Source GTD Style Productivity
-Hub List is an open source productivity app written entirely in JavaScript using [Ext JS 4](http://www.sencha.com/products/extjs/). It's a [CouchApp](http://couchapp.org/page/what-is-couchapp) which means it can be served directly from any CouchDB instance without the need for a seperate server side application stack!
+# Hub List
+Hub List is an [open source GTD style productivity app](http://hublistapp.com) written entirely in JavaScript using [Ext JS 4](http://www.sencha.com/products/extjs/). It's a [CouchApp](http://couchapp.org/page/what-is-couchapp) which means it can be served directly from any CouchDB instance without the need for a seperate server side application stack!
 
 ![Screenshots](http://dl.dropbox.com/u/946636/HL-Readme-Screnshots.png)
 
