@@ -1,0 +1,41 @@
+{
+    "rewrites" : [
+       {
+           "for": "Database API access",
+           "from": "db",
+           "to": "../../"
+       },
+       {
+           "from": "db/*",
+           "to": "../../*"
+       },
+       {
+           "for": "Access to data inside the ddoc",
+           "from": "ddoc",
+           "to": ""
+       },
+       {
+           "from": "ddoc/*",
+           "to": "*"
+       },
+       {
+           "from": "",
+           "to": "index.html"
+       },
+       {
+           "from": "*",
+           "to": "*"
+       }
+    ],
+    "views" : {
+        "containers" : {
+            "map" : "function(doc) { if( (doc.type == 'folder' || doc.type == 'list') && (doc.ancestors && doc.ancestors.length) ) { for(var parent in doc.ancestors) { if(doc.ancestors[parent]) { emit(doc.ancestors[parent], doc); } } } } "
+        },
+        "tasks" : {
+            "map" : "function(doc) { if( (doc.type == 'task') && (doc.ancestors && doc.ancestors.length) ) { for(var parent in doc.ancestors) { if(doc.ancestors[parent]) { emit(doc.ancestors[parent], doc); } } } } "
+        }
+    },
+
+
+    "createdBy" : "Your Name"
+}
