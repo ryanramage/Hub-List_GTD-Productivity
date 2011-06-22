@@ -11,32 +11,22 @@ The app is currently under heavy development and not ready for situations where 
 - A modern web browser
 
 ## Deployment Requirements
-To start using Hub List you'll need these tools to push the application code into an instance of CouchDB. These don't have be installed on the same machine as your CouchDB instance as long as they can access the CouchDB instance where you want Hub List installed.
+This version is forked to be deployed with reupholster.
 
-- [NodeJS](https://github.com/joyent/node) (0.4.0+)
-- [node.couchapp.js](https://github.com/mikeal/node.couchapp.js)
-
-## Installing Hub List
-1. Create a database named hublist on your instance of CouchDB. To use a different database name just change the db config value in app.js.  
+1. clone this repo
 ```
-curl -X PUT http://127.0.0.1:5984/hublist
-``` 
-
-2. clone this repo  
-```
-git clone  https://github.com/rawberg/Hub-List_GTD-Productivity Hub-List
+git clone  https://github.com/ryanramage/Hub-List_GTD-Productivity Hub-List
 ```
 
-3. push the code into the database you created (requires [node.couchapp.js](https://github.com/mikeal/node.couchapp.js))  
+2. open reupholster
+To start reupholster, click on the launch button on this page:
 ```
-cd Hub-List  
-couchapp push couchapp.js http://127.0.0.1:5984/hublist 
+http://reupholster.iriscouch.com/reupholster/_design/app/index.html
 ```
+Choose the directory containing the project. Change the couch settings to your likings. Click start.
+You should see the app get launched in your browser. Changes you make to the code will be updated
+in realtime.
 
-4. open the index.html file in your browser and enjoy!  
-```
-http://127.0.0.1:5984/hublist/index.html
-```
 
 
 ## Wishlist
