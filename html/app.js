@@ -13,9 +13,16 @@ Ext.require(['Ext.data.*',
 
 Ext.require(['HL.view.Viewport','HL.model.Container','HL.model.Task']);
 
+ // get a defualt db name.
+var db = 'hublist';
+if (window && window.location) {
+   var match = /\/(\w+)\//.exec(window.location);
+   db = match[1];
+}
+
 Ext.application({
     name: 'HL',
-    db: 'db',
+    db: db,
     version: '0.7.0',
     autoCreateViewport: false,
     appFolder: 'app',
